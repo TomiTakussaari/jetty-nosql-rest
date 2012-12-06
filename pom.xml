@@ -8,7 +8,7 @@
 		<jetty.version>8.1.7.v20120910</jetty.version>
 		<slf4j.version>1.6.1</slf4j.version>
 		<junit.version>4.8.1</junit.version>
-		<jersey.version>1.11</jersey.version>
+		<jersey.version>1.10</jersey.version>
 		<jackson.version>1.9.2</jackson.version>
 	</properties>
 	<dependencies>
@@ -67,14 +67,14 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-server</artifactId>
-			<version>1.10</version>
+			<version>${jersey.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>
-			<version>1.10</version>
+			<version>${jersey.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -153,11 +153,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>onejar-maven-plugin.googlecode.com</id>
-			<url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
-		</pluginRepository>
-	</pluginRepositories>
 </project>
