@@ -55,13 +55,23 @@ If using embedded jetty, it is much simpler:
       context.setSessionHandler(sessionHandler);
 
       
-You also need to specify few system properties, configuring where and how jetty connects to database:
-org.eclipse.jetty.rest.server.session.resource = URL for REST db, like http://localhost:8098/riak/sessions/
-org.eclipse.jetty.rest.server.clientid = ClientId given to db as request header, required by Riak.
+You also need to specify few system properties, configuring how Jetty connects to database:
+
+    System.setProperty("org.eclipse.jetty.rest.server.session.resource","http://localhost:8098/riak/sessions/"); 
+    
+If using Riak, its also recommended to use unique clientId which will be sent in request header to db:
+    
+    System.setProperty("org.eclipse.jetty.rest.server.clientid","My_unique_id");
 
 You can also configure HTTP timeouts for connections to db backend:
-org.eclipse.jetty.rest.server.read_timeout = HttpURLConnection.connectionTimeout, default 500ms
-org.eclipse.jetty.rest.server.connection_timeout = HttpURLConnection.eadTimeout, default 2000ms
+
+HttpURLConnection.connectionTimeout, default 500ms
+
+    System.setProperty("org.eclipse.jetty.rest.server.read_timeout","500");
+   
+HttpURLConnection.eadTimeout, default 2000ms
+
+    System.setProperty("org.eclipse.jetty.rest.server.connection_timeout","2000");
 
       
       
