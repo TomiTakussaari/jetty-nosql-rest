@@ -18,7 +18,7 @@ Install & Configure
 jetty-nosql-reset is an extension for Jetty8. 
 You have to install jars into jetty's ${jetty.home}/lib/ext.
 
-Because you jetty-nosql-rest depends on few libraries (related to json serialization), you have to install also
+Because jetty-nosql-rest depends on few libraries (related to json serialization), you have to install also
 those libraries. So it might be easiest to use jetty-nosql-rest-${version}-jar-with-dependencies.jar
 
 Jetty requires configuration changes to both ${JETTY_HOME}/etc/jetty.xml and to ${JETTY_HOME}/context/${APP_NAME}.xml   
@@ -31,7 +31,7 @@ Sample jetty.xml: (server level SessionIdManager)
         <New id="restSessionIdManager" class="org.eclipse.jetty.nosql.rest.RestSessionIdManager"></New>
       </Set>
 
-Sample jetty-web.xml: (webapplication level sessionManager)
+Sample jetty-web.xml: (webapplication level SessionManager)
 
       <Set name="sessionHandler">
         <New class="org.eclipse.jetty.server.session.SessionHandler">
@@ -42,7 +42,7 @@ Sample jetty-web.xml: (webapplication level sessionManager)
         </New>
       </Set>
       
-If using embedded jetty, it is much simpler:
+If using embedded jetty, configuration can be done like this:
 
       WebAppContext context = ...;
       Server server = ...;
