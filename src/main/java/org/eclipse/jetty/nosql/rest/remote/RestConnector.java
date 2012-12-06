@@ -16,13 +16,12 @@ public class RestConnector {
     private final RestClient restClient = new RestClient();
 
     public RestConnector() {
-        this(System.getProperty(Constants.REST_SERVER_URL_PROPERTY), Integer.valueOf(System.getProperty(Constants.REST_SERVER_PORT_PROPERTY)), System
-                .getProperty(Constants.REST_SERVER_SESSION_RESOURCE_PROPERTY));
+        this(System.getProperty(Constants.REST_SERVER_SESSION_RESOURCE_PROPERTY));
     }
 
-    public RestConnector(String server, int port, String sessionResourcePath) {
+    public RestConnector(String sessionResourcePath) {
         sessionConverter = new JsonSessionConverter();
-        sessionResource = server + ":" + port + "/" + sessionResourcePath + "/";
+        sessionResource = sessionResourcePath;
     }
 
     public boolean idInUse(String sessionId) {

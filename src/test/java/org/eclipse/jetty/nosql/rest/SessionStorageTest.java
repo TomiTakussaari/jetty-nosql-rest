@@ -88,15 +88,13 @@ public class SessionStorageTest {
 
     @Before
     public void init() throws Exception {
-        System.setProperty(Constants.REST_SERVER_URL_PROPERTY, "http://localhost");
-        System.setProperty(Constants.REST_SERVER_SESSION_RESOURCE_PROPERTY, "session/sessions");
 
         ServletHolder holder = new ServletHolder(new ServletContainer(new PackagesResourceConfig(ReferenceRESTStorage.class.getPackage().getName())));
         sessionStorageServer = new EmbeddedJettyServer(0, false);
 
         sessionStorageServer.bindServlet(holder, "/*");
         sessionStorageServer.start();
-        System.setProperty(Constants.REST_SERVER_PORT_PROPERTY, "" + sessionStorageServer.getPort());
+        System.setProperty(Constants.REST_SERVER_SESSION_RESOURCE_PROPERTY, "http://localhost:"+sessionStorageServer.getPort()+"/session/sessions/");
         serverOne = new EmbeddedJettyServer(0, true);
         serverOne.bindServlet(TestServlet.class, "/test");
         serverTwo = new EmbeddedJettyServer(0, true);
