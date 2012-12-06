@@ -43,15 +43,16 @@ Sample jetty-web.xml: (webapplication level sessionManager)
       </Set>
       
 If using embedded jetty, it is much simpler:
+
       WebAppContext context = ...;
       Server server = ...;
       RestSessionIdManager idManager = new RestSessionIdManager();
-			RestSessionManager sessionManager = new RestSessionManager();
-			server.setSessionIdManager(idManager);
-			sessionManager.setSessionIdManager(idManager);
-			SessionHandler sessionHandler = new SessionHandler();
-			sessionHandler.setSessionManager(sessionManager);
-			context.setSessionHandler(sessionHandler);
+      RestSessionManager sessionManager = new RestSessionManager();
+      server.setSessionIdManager(idManager);
+      sessionManager.setSessionIdManager(idManager);
+      SessionHandler sessionHandler = new SessionHandler();
+      sessionHandler.setSessionManager(sessionManager);
+      context.setSessionHandler(sessionHandler);
 
       
 You also need to specify few system properties, configuring where and how jetty connects to database:
