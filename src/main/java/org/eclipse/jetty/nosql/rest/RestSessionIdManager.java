@@ -15,7 +15,7 @@ public class RestSessionIdManager extends AbstractSessionIdManager {
 
     private final Set<String> _sessions = Collections.synchronizedSet(new LinkedHashSet<String>());
     private final Logger log = Logger.getLogger(RestSessionIdManager.class.toString());
-    private final RestConnector riak = new RestConnector();
+    private final RestConnector db = new RestConnector();
 
     @Override
     public void addSession(HttpSession session) {
@@ -50,7 +50,7 @@ public class RestSessionIdManager extends AbstractSessionIdManager {
     @Override
     public boolean idInUse(String sessionId) {
         synchronized (this) {
-            boolean inUse = riak.idInUse(sessionId);
+            boolean inUse = db.idInUse(sessionId);
             log.info("Session " + sessionId + " in use: " + inUse);
             return inUse;
         }

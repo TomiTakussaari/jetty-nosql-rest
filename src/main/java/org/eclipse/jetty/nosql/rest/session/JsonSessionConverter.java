@@ -40,6 +40,7 @@ public class JsonSessionConverter {
         mapper.configure(DeserializationConfig.Feature.USE_GETTERS_AS_SETTERS, false);
         mapper.configure(DeserializationConfig.Feature.CAN_OVERRIDE_ACCESS_MODIFIERS, true);
         mapper.configure(DeserializationConfig.Feature.READ_ENUMS_USING_TO_STRING, true);
+        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
         mapper.configure(SerializationConfig.Feature.CLOSE_CLOSEABLE, true);
         mapper.configure(SerializationConfig.Feature.WRAP_ROOT_VALUE, false);
@@ -148,3 +149,4 @@ public class JsonSessionConverter {
     }
 
 }
+

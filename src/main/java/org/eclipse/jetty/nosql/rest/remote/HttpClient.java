@@ -38,7 +38,7 @@ public class HttpClient {
     }
 
     public HttpResponse doHttp(String operation, String urlStr, String content, int expectedCode, String vClock) throws Exception {
-        logger.fine("doHttp: URL" + urlStr + " Operation: " + operation);
+        logger.info("doHttp: URL" + urlStr + " Operation: " + operation+" vclock: "+vClock);
         final URL url = new URL(urlStr);
 
         final HttpURLConnection conn = createConnection(operation, url);

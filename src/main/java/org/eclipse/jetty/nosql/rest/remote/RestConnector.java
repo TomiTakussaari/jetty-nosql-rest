@@ -33,7 +33,7 @@ public class RestConnector {
         if (response == null) {
             return null;
         }
-
+        logger.info("Got response, vClock: "+response.vClock);
         return sessionConverter.createRestSessionFromString(response.response, response.vClock);
     }
 
