@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +24,7 @@ public class HttpClient {
     public HttpClient() {
         connectionTimeoutInMilliseconds = Integer.valueOf(System.getProperty(Constants.HTTP_CONNECTION_TIMEOUT, "500"));
         readTimeoutInMilliseconds = Integer.valueOf(System.getProperty(Constants.HTTP_READ_TIMEOUT, "2000"));
-        clientId = System.getProperty(Constants.REST_CLIENT_ID, "jetty-nosql-rest");
+        clientId = System.getProperty(Constants.REST_CLIENT_ID, "jetty-nosql-rest-"+UUID.randomUUID());
     }
 
     public static class HttpResponse {

@@ -8,11 +8,11 @@ import org.eclipse.jetty.nosql.rest.remote.TestHttpClient;
 import org.eclipse.jetty.nosql.rest.remote.TestHttpClient.HttpResponse;
 
 public class SessionStoreEnsurer {
-    
+
     private SessionStoreEnsurer() {
-        
+
     }
-    
+
     public static void sessionIsSharedAndCounterUpdatedFromOneToThreeBeforeSessionIsInvalidated(ThreeServerJettyCluster jettyCluster) throws Exception {
         String url = "http://localhost:" + jettyCluster.serverOne.getPort() + "/test";
         HttpResponse response = TestHttpClient.doHttp("GET", url, null, 200, null);
@@ -25,14 +25,24 @@ public class SessionStoreEnsurer {
 
         url = "http://localhost:" + jettyCluster.serverOne.getPort() + "/test?destroy=true";
         response = TestHttpClient.doHttp("GET", url, null, 200, cookies);
-        
+
         /*
          * session is destroyed after request output
          */
-        assertEquals("count = 3 value: null", response.getResponse()); 
+        assertEquals("count = 3 value: null", response.getResponse());
+    }
+
+    public static void sessionKilledWhenOfOneServerShutdown(ThreeServerJettyCluster jettyCluster, String expectedResponse, Map<String, String> cookies) throws Exception {
+        jettyCluster.serverOne.shutdown();
+
+        String url = "http://localhost:" + jettyCluster.serverThree.getPort() + "/test";
+        HttpResponse response = TestHttpClient.doHttp("GET", url, null, 200, cookies);
+        assertEquals(expectedResponse, response.getResponse());
+        
     }
     
-    public static void sessionIsSharedAndCounterUpdatedFromOneToFour( ThreeServerJettyCluster jettyCluster) throws Exception {
+
+    public static Map<String, String> sessionIsSharedAndCounterUpdatedFromOneToFour(ThreeServerJettyCluster jettyCluster) throws Exception {
         String url = "http://localhost:" + jettyCluster.serverOne.getPort() + "/test";
         HttpResponse response = TestHttpClient.doHttp("GET", url, null, 200, null);
         assertEquals("count = 1 value: null", response.getResponse());
@@ -51,5 +61,7 @@ public class SessionStoreEnsurer {
         response = TestHttpClient.doHttp("GET", url, null, 200, cookies);
         assertEquals("count = 4 value: testValue", response.getResponse());
 
+        return cookies;
     }
+
 }

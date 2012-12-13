@@ -17,7 +17,7 @@ public class RestSession implements Serializable {
         this.accessed = accessed;
         this.clusterId = clusterId;
         this.version = version;
-        this.setvClock(vClock);
+        this.vClock = vClock;
         this.attributes = attributes;
     }
 

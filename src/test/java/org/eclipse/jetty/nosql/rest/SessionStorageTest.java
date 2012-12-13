@@ -2,6 +2,8 @@ package org.eclipse.jetty.nosql.rest;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
+
 import org.eclipse.jetty.nosql.rest.reference.ReferenceRESTStorage;
 import org.eclipse.jetty.nosql.rest.remote.Constants;
 import org.eclipse.jetty.nosql.rest.remote.TestHttpClient;
@@ -16,19 +18,31 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 public class SessionStorageTest {
 
     @Test
-    public void basicSessionStoring() throws Exception {    
+    public void basicSessionStoring() throws Exception {
         SessionStoreEnsurer.sessionIsSharedAndCounterUpdatedFromOneToFour(jettyCluster);
         assertOneSessionActive();
 
     }
 
     @Test
+    public void sessionInvalidatedWhenOneNodeFromClusterIsShutdown() throws Exception {
+        /**
+         * XXX: Not sure if this is wanted behaviour, but presumably there is some reason for working like this
+         * as this is how MongoSessionManager also seems to work.
+         * Also NoSQLSessionManager is quite clear on that it first saves and then deletes session..
+         */
+        Map<String, String> cookies = SessionStoreEnsurer.sessionIsSharedAndCounterUpdatedFromOneToFour(jettyCluster);
+        SessionStoreEnsurer.sessionKilledWhenOfOneServerShutdown(jettyCluster, "count = 1 value: null", cookies);
+        assertOneSessionActive();
+    }
+
+    @Test
     public void destroyingSession() throws Exception {
 
         SessionStoreEnsurer.sessionIsSharedAndCounterUpdatedFromOneToThreeBeforeSessionIsInvalidated(jettyCluster);
-        
+
         assertNoSessionsActive();
-        
+
         SessionStoreEnsurer.sessionIsSharedAndCounterUpdatedFromOneToFour(jettyCluster);
 
         assertOneSessionActive();
@@ -42,7 +56,6 @@ public class SessionStorageTest {
         assertEquals("0", TestHttpClient.doHttp("GET", "http://localhost:" + sessionStorageServer.getPort() + "/session", null, 200, null).getResponse());
     }
 
-
     private EmbeddedJettyServer sessionStorageServer;
     private ThreeServerJettyCluster jettyCluster;
 
@@ -54,10 +67,10 @@ public class SessionStorageTest {
 
         sessionStorageServer.bindServlet(holder, "/*");
         sessionStorageServer.start();
-        System.setProperty(Constants.REST_SERVER_SESSION_RESOURCE_PROPERTY, "http://localhost:"+sessionStorageServer.getPort()+"/session/sessions/");
-        
+        System.setProperty(Constants.REST_SERVER_SESSION_RESOURCE_PROPERTY, "http://localhost:" + sessionStorageServer.getPort() + "/session/sessions/");
+
         jettyCluster = new ThreeServerJettyCluster();
-        
+
     }
 
     @After

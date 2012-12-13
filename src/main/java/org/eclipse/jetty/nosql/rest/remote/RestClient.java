@@ -20,6 +20,16 @@ public class RestClient extends HttpClient {
         }
 
     }
+    
+    public void put(String string, String content, String vClock) {
+        try {
+            doHttp("PUT", string, content, 204, vClock);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 
     public void delete(String string, String vClock) {
         try {

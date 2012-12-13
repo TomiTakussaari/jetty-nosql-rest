@@ -9,12 +9,10 @@ import org.eclipse.jetty.nosql.rest.remote.RestConnector;
 public class RestSessionManager extends NoSqlSessionManager {
 
     private final Logger log = Logger.getLogger(RestSessionIdManager.class.toString());
-    private RestConnector db;
-
-    @Override
-    public void doStart() throws Exception {
-        super.doStart();
-        db = new RestConnector();
+    private final RestConnector db = new RestConnector();
+    
+    public RestSessionManager() {
+        setStalePeriod(0);
     }
 
     @Override
@@ -33,20 +31,21 @@ public class RestSessionManager extends NoSqlSessionManager {
     @Override
     protected boolean remove(NoSqlSession session) {
         log.info("remove:" + session + " ID:" + session.getId() + " CLUSTER " + session.getClusterId());
-        session.willPassivate();
         db.deleteSession(session);
-        session.didActivate();
         return true;
     }
 
     @Override
     protected Object save(NoSqlSession session, Object localVersion, boolean activateAfterSave) {
         log.info("save:" + session + " ID:" + session.getId());
-        Long version = getVersion(localVersion);
-        if (session.isValid()) {
-            session.willPassivate();
+        final Long version = getVersion(localVersion);
+        if (session.isValid() && session.isDirty()) {
+            session.takeDirty();
+            log.info("Saving session, it was dirty.");
 
-            db.saveSession(session.getId(), session, version);
+            session.willPassivate();
+            
+            db.saveSession(session.getId(), session, version, getContext().getContextHandler().getClassLoader());
 
             if (activateAfterSave) {
                 session.didActivate();
